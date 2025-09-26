@@ -1,41 +1,58 @@
-# bouncing-
-MovingShape shape;
+MovingShape[] shapes; 
+int numShapes = 5;    
 
 void setup() {
   size(600, 400);
-  ellipseMode(RADIUS);
-  shape = new MovingShape(100, height/2, 30, 4); // x, y, radius, speed
+
+  
+  shapes = new MovingShape[numShapes];
+  for (int i = 0; i < numShapes; i++) {
+    float x = random(50, width - 50);
+    float y = random(50, height - 50);
+    float size = random(30, 60);  
+    float speed = random(2, 5);
+    shapes[i] = new MovingShape(x, y, size, speed);
+  }
 }
 
 void draw() {
   background(200, 220, 255);
-  shape.update();
-  shape.display();
+
+  
+  for (int i = 0; i < numShapes; i++) {
+    shapes[i].update();
+    shapes[i].drawShape();
+  }
 }
 
-class MovingShape {
-  float x, y;
-  float r;
-  float speed;
 
-  MovingShape(float x_, float y_, float r_, float speed_) {
+class MovingShape {
+  float x, y;    
+  float size;    
+  float speed;   
+  
+  MovingShape(float x_, float y_, float size_, float speed_) {
     x = x_;
     y = y_;
-    r = r_;
+    size = size_;
     speed = speed_;
   }
 
+  
   void update() {
     x += speed;
 
-   
-    if (x > width - r || x < r) {
+    
+    if (x > width - size/2 || x < size/2) {
       speed = -speed;
     }
   }
 
-  void display() {
-    fill(255, 400, 10);
-    ellipse(x, y, r, r);
+  
+  void drawShape() {
+    fill(255, 100, 100, 180);
+    noStroke();
+    rectMode(CENTER);
+    rect(x, y, size, size);
   }
 }
