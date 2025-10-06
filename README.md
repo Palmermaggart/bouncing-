@@ -1,63 +1,54 @@
 MovingShape[] shapes; 
-int maxShapes = 10;   
-int shapeCount = 0;   
+int numShapes = 5;    
 
 void setup() {
   size(600, 400);
-  shapes = new MovingShape[maxShapes]; 
+
+  shapes = new MovingShape[numShapes];
+  for (int i = 0; i < numShapes; i++) {
+    float x = random(50, width - 50);
+    float y = random(50, height - 50);
+    float size = random(30, 60);  
+    float speed = random(2, 5);
+    shapes[i] = new MovingShape(x, y, size, speed);
+  }
 }
 
 void draw() {
   background(200, 220, 255);
 
-  
-  for (int i = 0; i < shapeCount; i++) {
-    shapes[i].update();
-    shapes[i].drawShape();
-  }
-}
-
-void mousePressed() {
-  
-  if (shapeCount < maxShapes) {
-    shapes[shapeCount] = new MovingShape(mouseX, mouseY);
-    shapeCount++;
-  } else {
-    
-    for (int i = 1; i < maxShapes; i++) {
-      shapes[i-1] = shapes[i];
-    }
-    
-    shapes[maxShapes-1] = new MovingShape(mouseX, mouseY);
+ 
+  for (MovingShape shape : shapes) {
+    shape.update();
+    shape.drawShape();
   }
 }
 
 class MovingShape {
-  float x, y;
-  float size;
-  float speedX;
-  float speedY;
-
+  float x, y;    
+  float size;    
+  float speed;   
   
-  MovingShape(float startX, float startY) {
-    x = startX;
-    y = startY;
-    size = random(20, 50);
-    speedX = random(-2, 2);
-    speedY = random(-2, 2);
+  MovingShape(float x_, float y_, float size_, float speed_) {
+    x = x_;
+    y = y_;
+    size = size_;
+    speed = speed_;
   }
 
   void update() {
-    x += speedX;
-    y += speedY;
-
-    
-   
+    x += speed;
+    if (x > width - size/2 || x < size/2) {
+      speed = -speed;
+    }
   }
 
   void drawShape() {
-    fill(100, 150, 255);
-    ellipse(x, y, size, size);
+    fill(100, 150, 255, 180);
+    noStroke();
+    ellipseMode(CENTER);
+    ellipse(x, y, size, size);  
   }
 }
+
 
